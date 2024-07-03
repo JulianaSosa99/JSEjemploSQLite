@@ -15,8 +15,8 @@ public static class MauiProgram
 
 		// TODO: Add statements for adding PersonRepository as a singleton
 
-		FileAccessHelper.GetLocalFilePath("jspeople.db3");
-        builder.Services.AddSingleton<PersonRepository>(s => ActivatorUtilities.CreateInstance<PersonRepository>(s, dbPath));
+		string dBPath=FileAccessHelper.GetLocalFilePath("jspeople.db3");
+        builder.Services.AddSingleton<PersonRepository>(s => ActivatorUtilities.CreateInstance<PersonRepository>(s,dBPath));
 
 
         return builder.Build();
