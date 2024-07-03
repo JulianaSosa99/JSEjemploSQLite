@@ -1,4 +1,5 @@
 ﻿using People.Models;
+using SQLite;
 
 namespace People;
 
@@ -7,12 +8,18 @@ public class PersonRepository
     string _dbPath;
 
     public string StatusMessage { get; set; }
+    private SQLiteConnection _conn{ get; set; }
 
     // TODO: Add variable for the SQLite connection
 
     private void Init()
     {
-        // TODO: Add code to initialize the repository         
+ 
+    if(_conn != null)
+      return;
+        _conn= new SQLiteConnection(_dbPath);
+        _conn.CreateTable<JSPerson>();  
+        
     }
 
     public PersonRepository(string dbPath)
@@ -26,13 +33,15 @@ public class PersonRepository
         try
         {
             // TODO: Call Init()
+            Init();
 
             // basic validation to ensure a name was entered
             if (string.IsNullOrEmpty(name))
-                throw new Exception("Valid name required");
+                throw new Exception("Debes ingresar un nombre para ingresar a la persona");
 
             // TODO: Insert the new person into the database
-            result = 0;
+            result = _conn.Insert(new JSPerson { Name = name });
+           // result = 0;
 
             StatusMessage = string.Format("{0} record(s) added (Name: {1})", result, name);
         }
@@ -45,9 +54,12 @@ public class PersonRepository
 
     public List<JSPerson> GetAllPeople()
     {
+
         // TODO: Init then retrieve a list of Person objects from the database into a list
         try
         {
+            Init();
+            return _conn.Table<JSPerson>().ToList();
             
         }
         catch (Exception ex)

@@ -23,7 +23,7 @@ public partial class MainPage : ContentPage
     {
         statusMessage.Text = "";
 
-        List<Person> people = App.PersonRepo.GetAllPeople();
+        List<JSPerson> people = App.PersonRepo.GetAllPeople();
         peopleList.ItemsSource = people;
     }
 
