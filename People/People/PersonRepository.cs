@@ -1,4 +1,6 @@
-﻿namespace People;
+﻿using People.Models;
+
+namespace People;
 
 public class PersonRepository
 {
@@ -41,7 +43,7 @@ public class PersonRepository
 
     }
 
-    public List<Person> GetAllPeople()
+    public List<JSPerson> GetAllPeople()
     {
         // TODO: Init then retrieve a list of Person objects from the database into a list
         try
@@ -53,6 +55,6 @@ public class PersonRepository
             StatusMessage = string.Format("Failed to retrieve data. {0}", ex.Message);
         }
 
-        return new List<Person>();
+        return new List<JSPerson>();
     }
 }
