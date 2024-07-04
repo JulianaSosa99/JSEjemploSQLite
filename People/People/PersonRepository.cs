@@ -8,17 +8,17 @@ public class PersonRepository
     string _dbPath;
 
     public string StatusMessage { get; set; }
-    private SQLiteConnection _conn{ get; set; }
+    private SQLiteAsyncConnection _conn{ get; set; }
 
     // TODO: Add variable for the SQLite connection
 
-    private void Init()
+    private async Task Init()
     {
  
     if(_conn != null)
       return;
-        _conn= new SQLiteConnection(_dbPath);
-        _conn.CreateTable<JSPerson>();  
+       _conn= new SQLiteAsyncConnection(_dbPath);
+       await  _conn.CreateTableAsync<JSPerson>();  
         
     }
 
@@ -27,20 +27,20 @@ public class PersonRepository
         _dbPath = dbPath;                        
     }
 
-    public void AddNewPerson(string name)
+    public async Task AddNewPerson(string name)
     {            
         int result = 0;
         try
         {
             // TODO: Call Init()
-            Init();
+           await  Init();
 
             // basic validation to ensure a name was entered
             if (string.IsNullOrEmpty(name))
                 throw new Exception("Debes ingresar un nombre para ingresar a la persona");
 
             // TODO: Insert the new person into the database
-            result = _conn.Insert(new JSPerson { Name = name });
+            result = await _conn.InsertAsync(new JSPerson { Name = name });
            // result = 0;
 
             StatusMessage = string.Format("{0} record(s) added (Name: {1})", result, name);
@@ -52,14 +52,14 @@ public class PersonRepository
 
     }
 
-    public List<JSPerson> GetAllPeople()
+    public async Task<List<JSPerson>> GetAllPeople()
     {
 
         // TODO: Init then retrieve a list of Person objects from the database into a list
         try
         {
-            Init();
-            return _conn.Table<JSPerson>().ToList();
+            await Init();
+            return await _conn.Table<JSPerson>().ToListAsync();
             
         }
         catch (Exception ex)
